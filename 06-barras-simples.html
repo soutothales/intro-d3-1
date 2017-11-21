@@ -18,6 +18,7 @@
     <style>
       .mychart rect {
         fill: steelblue;
+        margin: 10px;
       }
 
       .mychart text {
@@ -38,6 +39,7 @@
                 .attr('width', largura)
                 .attr('height', altura);
 
+
       /* Edite o código abaixo para criar um gráfico de barras horizontais
        *
        * Crie funções que a partir dos dados definem os atributos x, y, width
@@ -49,14 +51,25 @@
        * (Nem pense em fazer hardcoded :)).
        */
 
-      var barras = svg.selectAll('rect')
-                      .data(dados)
-                      .enter()
-                        .append('rect')
-                        .attr('x', 0) // Que tal uma função com dois parâmetros: d e i?
-                        .attr('y', 0)
-                        .attr('width', 30)
-                        .attr('height', 20);
+        var i = 1;
+        function gerador_x_y() {
+          i++;
+          return i*30;
+        }
+
+
+         var barras = svg.selectAll('rect')
+                         .data(dados)
+                         .enter()
+                         .append('rect')
+                         .attr('x', 0) // Que tal uma função com dois parâmetros: d e i?
+                         .attr('y', gerador_x_y)
+                         .attr('width', 40)
+                         .attr('height', 20);
+
+
+
+
 
       /* Mais dicas :
        * - As barras ficam mais legíveis se não encostarem umas nas outras.

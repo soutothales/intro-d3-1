@@ -18,13 +18,11 @@
     <style>
       .mychart rect {
         fill: steelblue;
-        margin: 10px;
       }
 
       .mychart text {
         fill: white;
-        font: 10px sans-serif;
-        text-anchor: end;
+        font: 12px sans-serif;
       }
     </style>
 
@@ -51,19 +49,7 @@
        * (Nem pense em fazer hardcoded :)).
        */
 
-<<<<<<< HEAD
-          var t = 0;
-          var i = 0;
 
-          function generator_barra() {
-             i++;
-             return dados[i]*3;
-          }
-
-          function generator_y() {
-             t++;
-             return t*30;
-          }
 
           var group1 = svg.selectAll("g")
                       .data(dados)
@@ -73,27 +59,18 @@
 
           group1.append('rect')
                              .attr('x', 0) // Que tal uma função com dois parâmetros: d e i?
-                             .attr('y', generator_y)
-                             .attr('width', generator_barra)
+                             .attr('y', function(d, i){return i * 30})
+                             .attr('width', function(d) {
+                                return d*3;
+                             })
                              .attr('height', 20);
 
           group1.append('text')
                   .text(function(d){
-                     return "" + d;
+                     return d;
                   })
-                  .attr("x", generator_y)
-                  .attr("y", generator_barra);
-
-=======
-      svg.selectAll('rect')
-          .data(dados)
-          .enter()
-            .append('rect')
-              .attr('x', 0) // A função com dois parâmetros pode entrar aqui
-              .attr('y', 0) // e aqui
-              .attr('width', 30)
-              .attr('height', 20);
->>>>>>> upstream/master
+                  .attr("x", function(d) {return (d*3) - 17;}) //Localização de onde o número ficará na barrano eixo X
+                  .attr("y", function(d, i){return (i * 30) + 15}); //Localização de onde o número ficará na barrano eixo Y
 
       /* Mais dicas :
        * - As barras ficam mais legíveis se não encostarem umas nas outras. Para isso

@@ -11,7 +11,7 @@
       <div class="row">
         <h2>Um SVG dinâmico</h2>
       </div>
-      <div class="row mychart" id="chart">
+      <div class="row mychart" id="group">
       </div>
     </div>
 
@@ -31,10 +31,10 @@
     <script type="text/javascript">
       "use strict"
       var dados = [40, 80, 96, 76, 23, 42, 32, 90, 11, 22, 14];
-      var largura = 200,
+      var largura = 750,
           altura = 500;
 
-      var svg = d3.select('#chart')
+      var svg = d3.select('#group')
                 .append('svg')
                 .attr('width', largura)
                 .attr('height', altura);
@@ -51,24 +51,37 @@
        * (Nem pense em fazer hardcoded :)).
        */
 
-        var i = 1;
-        function gerador_x_y() {
-          i++;
-          return i*30;
-        }
+          var t = 0;
+          var i = 0;
+
+          function generator_barra() {
+             i++;
+             return dados[i]*3;
+          }
+
+          function generator_y() {
+             t++;
+             return t*30;
+          }
+
+          var group1 = svg.selectAll("g")
+                      .data(dados)
+                      .enter()
+                      .append("g");
 
 
-         var barras = svg.selectAll('rect')
-                         .data(dados)
-                         .enter()
-                         .append('rect')
-                         .attr('x', 0) // Que tal uma função com dois parâmetros: d e i?
-                         .attr('y', gerador_x_y)
-                         .attr('width', 40)
-                         .attr('height', 20);
+          group1.append('rect')
+                             .attr('x', 0) // Que tal uma função com dois parâmetros: d e i?
+                             .attr('y', generator_y)
+                             .attr('width', generator_barra)
+                             .attr('height', 20);
 
-
-
+          group1.append('text')
+                  .text(function(d){
+                     return "" + d;
+                  })
+                  .attr("x", generator_y)
+                  .attr("y", generator_barra);
 
 
       /* Mais dicas :

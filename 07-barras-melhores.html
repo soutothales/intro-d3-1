@@ -77,9 +77,14 @@
       /*
        * As escalas
        */
-      var x = d3.scaleBand(); // Configure essa escala com domain, range e padding
+      var x = d3.scaleBand()
+                .domain([0, 100])
+                .range([0, 1000])
+                .padding(.8); // Configure essa escala com domain, range e padding
 
-      var y = d3.scaleLinear() // Configure essa escala com domain e range
+      var y = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, 1000]); // Configure essa escala com domain e range
                                // Lembre que uma escala pode converter de 1..10 -> 100..1
 
       // === ATÉ DAQUI ===

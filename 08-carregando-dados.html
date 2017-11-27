@@ -36,7 +36,31 @@
     "use strict"
 
     function desenhaBarras(dados) {
-      // Preencha aqui.
+          var svg = d3.select('#group')
+                    .append('svg')
+                    .attr('width', 750)
+                    .attr('height', 500);
+
+          var group1 = svg.selectAll("g")
+                      .data(dados)
+                      .enter()
+                      .append("g");
+
+
+          group1.append('rect')
+                             .attr('x', 0)
+                             .attr('y', function(d, i){return i * 30})
+                             .attr('width', function(d) {
+                                return d.valor*3;
+                             })
+                             .attr('height', 20);
+
+          group1.append('text')
+                  .text(function(d){
+                     return d;
+                  })
+                  .attr("x", function(d) {return (d.valor*3) - 17;})
+                  .attr("y", function(d, i){return (i * 30) + 15});
     }
 
     d3.tsv('dados/alphabet.tsv', function(dados) {

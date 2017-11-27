@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <title>Barras simples</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <h2>Visualização final de boqueirão</h2>
+    </div>
+    <div class="row mychart" id="chart">
+    </div>
+  </div>
+
+  <style>
+    /*.mychart circle {
+      fill: steelblue;
+    }
+
+    .mychart circle:hover {
+      fill: goldenrod;
+    }*/
+
+  </style>
+
+  <script type="text/javascript">
+    "use strict"
+
+    var alturaSVG = 500,
+        larguraSVG = 1750;
+
+
+    function desenhaVis(dados) {
+          var grafico = d3.select('#chart') // cria elemento <svg> com um <g> dentro
+                            .append('svg')
+                              .attr('width', larguraSVG)
+                              .attr('height', alturaSVG);
+
+
+
+          /*
+           * As escalas
+           *
+
+          var cx = d3.scaleBand()
+                    .domain([0, 10]))
+                    .range([0, 100]); // Configure essa escala com domain, range e padding
+
+          var cy = d3.scaleLinear()
+                    .domain([0, 100])
+                    .range([0, 100]); // Configure essa escala com domain e range
+                                   // Lembre que uma escala pode converter de 1..10 -> 100..1
+
+
+
+
+
+          /*
+           * As marcas
+           */
+
+           /*grafico.selectAll('g')
+                   .data(dados)
+                   .enter()
+                     .append('rect')
+                       .attr('x', d => x(d.mes))   // usando a escala definida acima
+                       .attr('width', x.bandwidth()) // largura da barra via escala
+                       .attr('y', d => y(d.noventa_percentil))
+                       .attr('height', (d) => alturaVis - y(d.noventa_percentil)); // de cabeca para baixo
+            */
+
+           var grupo = grafico.selectAll('g')
+                   .data(dados)
+                   .enter()
+                   .append('g');
+
+
+         grupo.append('circle')
+            .attr("cx", function(d) { return (d.mes) * 125; })
+            .attr("cy", 250)
+            .attr("r", function(d) { return d.noventa_percentil * 0.60; })
+            .style("fill", "goldenrod");
+
+          grupo.append('circle')
+             .attr("cx", function(d) { return (d.mes) * 125; })
+             .attr("cy", 250)
+             .attr("r", function(d) { return d.dez_percentil; })
+             .style("fill", "steelblue");
+
+        grupo.append('text')
+             .text(function(d){
+                return d.mes;
+             })
+             .attr("x", function(d) { return (d.mes) * 125 - 8; }) //Localização de onde o número ficará na barrano eixo X
+             .attr("y", 250);
+
+
+
+
+
+
+
+
+          /*
+           * Os eixos
+           *
+
+          grafico.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + alturaVis + ")")
+                  .call(d3.axisBottom(x)); // magica do d3: gera eixo a partir da escala
+
+          grafico.append('g')
+                  .attr('transform', 'translate(0,0)')
+                  .call(d3.axisLeft(y))  // gera eixo a partir da escala
+
+            */
+
+    }
+
+    d3.csv('dados/boqueirao-por-mes.csv', function(dados) {
+      console.log("provavelmente acontece depois");
+      desenhaVis(dados);
+    });
+
+    console.log("provavelmente acontece primeiro") // me apague quando entender.
+
+  </script>
+</body>
+
+</html>

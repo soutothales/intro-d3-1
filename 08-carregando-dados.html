@@ -59,20 +59,20 @@
       .append('g') // para entender o <g> vá em x03-detalhes-svg.html
         .attr('transform', 'translate(' +  margin.left + ',' + margin.top + ')');
 
-    // === EDITE DAQUI ===
+
     /*
      * As escalas
      */
 
     var x = d3.scaleBand()
+              .domain(dados.map((dados, indice) => dados.letra))
               .range([0, larguraVis]); // Configure essa escala com domain, range e padding
 
     var y = d3.scaleLinear()
-              .domain([0, 100])
+              .domain([0, 0.2])
               .range([alturaVis, 0]); // Configure essa escala com domain e range
                              // Lembre que uma escala pode converter de 1..10 -> 100..1
 
-    // === ATÉ DAQUI ===
 
     /*
      * As marcas
@@ -81,10 +81,10 @@
             .data(dados)
             .enter()
               .append('rect')
-                .attr('x', function(d, i) {return i * 30;})   // usando a escala definida acima
-                .attr('width', 30) // largura da barra via escala
-                .attr('y', d => d.valor)
-                .attr('height', function(d){ return d.valor*2000}); // de cabeca para baixo
+                .attr('x', d => x(d.letra))   // usando a escala definida acima
+                .attr('width', x.bandwidth()) // largura da barra via escala
+                .attr('y', d => y(d.valor))
+                .attr('height', (d) => alturaVis - y(d.valor)); // de cabeca para baixo
 
     /*
      * Os eixos

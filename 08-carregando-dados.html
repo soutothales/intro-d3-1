@@ -35,40 +35,87 @@
   <script type="text/javascript">
     "use strict"
 
-    function desenhaBarras(dados) {
-          var svg = d3.select('#group')
-                    .append('svg')
-                    .attr('width', 750)
-                    .attr('height', 500);
-
-          var group1 = svg.selectAll("g")
-                      .data(dados)
-                      .enter()
-                      .append("g");
+    var alturaSVG = 400, larguraSVG = 900;
+    var	margin = {top: 10, right: 20, bottom:30, left: 45}, // para descolar a vis das bordas do grafico
+        larguraVis = larguraSVG - margin.left - margin.right,
+        alturaVis = alturaSVG - margin.top - margin.bottom;
 
 
-          group1.append('rect')
-                             .attr('x', 0)
-                             .attr('y', function(d, i){return i * 30})
-                             .attr('width', function(d) {
-                                return d.valor*3;
-                             })
-                             .attr('height', 20);
 
-          group1.append('text')
-                  .text(function(d){
-                     return d;
-                  })
-                  .attr("x", function(d) {return (d.valor*3) - 17;})
-                  .attr("y", function(d, i){return (i * 30) + 15});
-    }
+    /*
+     * Prepara onde adicionaremos a visualizacao
+     */
 
-    d3.tsv('dados/alphabet.tsv', function(dados) {
-      console.log("provavelmente acontece depois")
-      desenhaBarras(dados);
-    });
+  function desenhaBarras(dados) {
 
-    console.log("provavelmente acontece primeiro") // me apague quando entender.
+
+    /*
+     * Prepara onde adicionaremos a visualizacao
+     */
+    var grafico = d3.select('#chart') // cria elemento <svg> com um <g> dentro
+      .append('svg')
+        .attr('width', larguraVis + margin.left + margin.right)
+        .attr('height', alturaVis + margin.top + margin.bottom)
+      .append('g') // para entender o <g> vá em x03-detalhes-svg.html
+        .attr('transform', 'translate(' +  margin.left + ',' + margin.top + ')');
+
+    // === EDITE DAQUI ===
+    /*
+     * As escalas
+     */
+
+    var x = d3.scaleBand()
+              .range([0, larguraVis]); // Configure essa escala com domain, range e padding
+
+    var y = d3.scaleLinear()
+              .domain([0, 100])
+              .range([alturaVis, 0]); // Configure essa escala com domain e range
+                             // Lembre que uma escala pode converter de 1..10 -> 100..1
+
+    // === ATÉ DAQUI ===
+
+    /*
+     * As marcas
+     */
+    grafico.selectAll('g')
+            .data(dados)
+            .enter()
+              .append('rect')
+                .attr('x', function(d, i) {return i * 30;})   // usando a escala definida acima
+                .attr('width', 30) // largura da barra via escala
+                .attr('y', d => d.valor)
+                .attr('height', function(d){ return d.valor*2000}); // de cabeca para baixo
+
+    /*
+     * Os eixos
+     */
+    grafico.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + alturaVis + ")")
+            .call(d3.axisBottom(x)); // magica do d3: gera eixo a partir da escala
+
+    grafico.append('g')
+            .attr('transform', 'translate(0,0)')
+            .call(d3.axisLeft(y));  // gera eixo a partir da escala
+
+    grafico.append("text")
+      .attr("transform", "translate(-30," + (alturaVis + margin.top)/2 + ") rotate(-90)")
+      .text("Frequencia");
+
+
+    grafico.append("text")
+      .attr('x', function(d, i) {return i * 30 + 17;})
+      .attr("y", function(d, i) {return (i * 30) - 15;})
+      .text(function(d){
+         return d.letra; });
+  }
+
+  d3.tsv('dados/alphabet.tsv', function(dados) {
+    console.log("provavelmente acontece depois")
+    desenhaBarras(dados);
+  });
+
+  console.log("provavelmente acontece primeiro") // me apague quando entender.
 
     /*
     * Assim como a função d3.tsv, existe a d3.csv e a d3.json

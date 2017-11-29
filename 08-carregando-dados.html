@@ -103,11 +103,7 @@
       .text("Frequencia");
 
 
-    grafico.append("text")
-      .attr('x', function(d, i) {return i * 30 + 17;})
-      .attr("y", function(d, i) {return (i * 30) - 15;})
-      .text(function(d){
-         return d.letra; });
+    
   }
 
   d3.tsv('dados/alphabet.tsv', function(dados) {
